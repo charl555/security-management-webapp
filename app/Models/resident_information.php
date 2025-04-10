@@ -40,4 +40,8 @@ class resident_information extends Model
         return $this->hasOne(resident_address::class, 'resident_information_id');
     }
 
+    public function photo()
+    {
+        return $this->hasOne(resident_photo::class,'resident_information_id');
+    }
 }

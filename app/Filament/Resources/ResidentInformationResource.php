@@ -10,6 +10,10 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\FileUpload;
+use App\View\Components\CameraCapture;
+
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -24,33 +28,50 @@ class ResidentInformationResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $modelLabel = 'Resident Info';
+    protected static ?string $navigationGroup = 'Residents';
+    protected static ?string $modelLabel = 'Resident Information';
 
     public static function form(Form $form): Form
     {
         return $form
 
         ->schema([
-
             Section::make('Personal Info')->columns(2)
+            ->description('Input Resident\'s personal information.')
             ->schema([
+                Group::make()->schema([
                 TextInput::make('first_name')->required(),
                 TextInput::make('middle_name')->nullable(),
                 TextInput::make('last_name')->required(),
                 TextInput::make('email')->email(),
                 TextInput::make( 'phone_number')->numeric(),
+                ]),
+
+                Group::make()->schema([
                 Select::make('gender')->options(['Male' => 'Male', 'Female' => 'Female', 'Other'=> 'Other'])->required(),
                 DatePicker::make('date_of_birth'),
                 TextInput::make('place_of_birth')->required(),
-                TextInput::make('occupation')->required(),    
+                TextInput::make('occupation')->required(), 
+                    
+                ])
+                   
             ]),
 
-            Section::make('Address')->columns(2)
+            Section::make('Address')->columnSpan(1)
+            ->description('Input Resident\'s address.')
             ->schema([
                 TextInput::make('home_address')->required(),
                 TextInput::make('street_name')->required(),
                 TextInput::make('phase_number')->required()->numeric(),
-            ]),
+            ])
+            ->visible(fn($livewire) => ! $livewire instanceof \Filament\Resources\Pages\EditRecord),
+            
+            Section::make('Photo')->columnSpan(1)
+            ->description('Upload Resident\'s photo.')
+            ->schema([
+               CameraCapture::make('resident_photo'),
+            ])
+            ->visible(fn($livewire) => ! $livewire instanceof \Filament\Resources\Pages\EditRecord),
 
         ]);
 
@@ -61,14 +82,15 @@ class ResidentInformationResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn ::make('resident_information_id')->label('ID'),
+                TextColumn ::make('resident_information_id')->label('Resident ID'),
                 TextColumn::make('first_name'),
                 TextColumn::make('middle_name'),
                 TextColumn::make('last_name'),
                 TextColumn::make('email'),
                 TextColumn::make('phone_number'),
                 TextColumn::make('gender'),
-                TextColumn::make('date_of_birth'),
+                TextColumn::make('age')->sortable(),
+                TextColumn::make('date_of_birth')->sortable(),
                 TextColumn::make('place_of_birth'),
                 TextColumn::make('occupation'),
 

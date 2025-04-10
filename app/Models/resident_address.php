@@ -11,6 +11,7 @@ class resident_address extends Model
     protected $primaryKey = "resident_address_id";
 
     protected $fillable = [
+        'resident_information_id',
         "home_address",
         "street_name",
         "phase_number",

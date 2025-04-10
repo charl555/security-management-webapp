@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ResidentInformationResource\Pages;
 use App\Filament\Resources\ResidentInformationResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Resources\Pages\ListRecords\Tab;
 
 class ListResidentInformation extends ListRecords
 {
@@ -14,6 +15,14 @@ class ListResidentInformation extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+
+    public function getTabs(): Array{
+        return 
+        [ 
+            'ALL' => Tab::make(),
+             
         ];
     }
 }
